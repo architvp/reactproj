@@ -1,9 +1,9 @@
 const axios = require('axios');
-const { GraphQLObjectType, GraphQLFloat, GraphQLList, GraphQLSchema, GraphQLString, GraphQLScalarType, GraphQLInt} = require('graphql');
+const { GraphQLObjectType, GraphQLFloat, GraphQLSchema, GraphQLString} = require('graphql');
 
 // Bitcoin data type
-const CurrencyDataType = new GraphQLObjectType({
-  name: 'launch',
+const CurrencyRateType = new GraphQLObjectType({
+  name: 'CurrencyRateType',
   fields: () => ({
     code: {type: GraphQLString},
     symbol: {type: GraphQLString},
@@ -15,12 +15,12 @@ const CurrencyDataType = new GraphQLObjectType({
 const RootQuery = new GraphQLObjectType({
   name: 'RootQueryType',
   fields: {
-    launchInfo: {
-      type: CurrencyDataType,
+    bitcoinRates: {
+      type: CurrencyRateType,
       args: {
         currency: {type: GraphQLString}
       },
-      resolve: async(parent, args) => {
+      resolve: async(_, args) => {
         const coinData = await axios.get('https://api.coindesk.com/v1/bpi/currentprice.json').then(res => res.data.bpi);
         return coinData[args.currency];
       }
